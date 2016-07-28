@@ -10,6 +10,8 @@
 -- 	end
 -- end)
 
+max_bright = 255
+
 function mod(a ,b)
 	m=a-(a/b)*b
 	return m
@@ -18,8 +20,8 @@ end
 function normal(a)
 	if a < 0 then
 		return 0
-	elseif a > 255 then
-		return mod(a, 256)
+	elseif a > max_bright then
+		return mod(a, max_bright)
 	else
 		return a
 	end
@@ -29,7 +31,7 @@ function make_sweep()
 	inc_channel = 1
 	channel = 2
 	dec_channel =3
-	channels = { 255; 255; 255 }
+	channels = { max_bright; max_bright; max_bright }
 	return function()
 		channels[inc_channel] = normal(channels[inc_channel] + 1)
 		channels[dec_channel] = normal(channels[dec_channel] - 1)
@@ -39,7 +41,7 @@ function make_sweep()
 			dec_channel = mod(dec_channel+1,3)+1
 		end
 		
-		out = string.rep(string.char(31, channels[1], channels[2], channels[3]), 4)
+		out = string.rep(string.char(10, channels[1], channels[2], channels[3]), 6)
 		apa102.write(7,6,out)
 	end
 end
